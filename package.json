@@ -12,11 +12,12 @@
   "dependencies": {
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
+    "lodash": "^4.17.5",
     "mongodb": "^2.2.4",
     "mongoose": "^5.0.5"
   },
   "devDependencies": {
-    "expect": "^22.3.0",
+    "expect": "^1.3.0",
     "mocha": "^5.0.1",
     "supertest": "^3.0.0"
   }
