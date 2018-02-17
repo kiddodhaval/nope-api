@@ -1,13 +1,16 @@
 const expect = require('expect')
 const request = require('supertest')
 const {Todo} = require('../models/todo')
+const {ObjectID} = require('mongodb')
 
 const {app} = require('../server/server')
 
 const todos = [
     {
+        _id: new ObjectID(),
         text: 'First test todo'
     }, {
+        _id: new ObjectID(),
         text: 'Second test todo'
     }
 ];
@@ -61,6 +64,33 @@ describe('GET /todos', () => {
             .expect((res) => {
                 expect(res.body.length).toBe(2)
             })
+            .end(done)
+    });
+})
+
+describe('GET /todos/:id', () => {
+    it('should return the todo which has the same id as passed', (done) => {
+        request(app)
+            .get(`/todos/${todos[0]._id}`)
+            .expect(200)
+            .expect((res) => {
+               expect(res.body.text).toBe(todos[0].text)
+            })
+            .end(done)
+    });
+
+    it('should return 404 if id does not match with any todo in db', (done) => {
+        const newId = new ObjectID().toHexString()
+        request(app)
+            .get(`/todos/${newId }`)
+            .expect(404)
+            .end(done)
+    });
+
+    it('should return 404 if invalid ID provided', (done) => {
+        request(app)
+            .get('/todos/123abc')
+            .expect(404)
             .end(done)
     });
 })
